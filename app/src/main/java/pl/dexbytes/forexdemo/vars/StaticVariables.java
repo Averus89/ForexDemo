@@ -2,7 +2,7 @@ package pl.dexbytes.forexdemo.vars;
 
 public class StaticVariables {
     public static class Urls{
-        public static final String BASE_URL = "https://api.1forge.com/endpoint";
+        public static final String BASE_URL = "https://forex.1forge.com/1.0.3/";
         public static final String API_PARAM = "api_key";
         public static final String QUOTES = "quotes";
         public static final String SYMBOLS = "symbols";
@@ -13,5 +13,9 @@ public class StaticVariables {
 
     public static class Keys {
         public static final String ONE_FORGE_API_KEY = "ie0FVxVnsoG2ZKF7OWooOuRbFtZw2COI";
+    }
+
+    public static class Example {
+        public static final String EXAMPLE_PAIRS = "EURUSD,GBPJPY,AUDUS";
     }
 }

@@ -2,7 +2,7 @@ package pl.dexbytes.forexdemo.net.OneForge;
 
 import com.google.gson.annotations.SerializedName;
 
-class Quote {
+public class Quote {
     @SerializedName("symbol")
     String mSymbol;
 

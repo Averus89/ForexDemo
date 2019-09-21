@@ -11,13 +11,12 @@ import pl.dexbytes.forexdemo.App;
 @Component(modules = {
         AndroidSupportInjectionModule.class,
         AppModule.class,
-        BuildersModule.class
+        AppBinder.class
 })
 public interface AppComponent {
     @Component.Builder
     interface Builder {
-        @BindsInstance
-        Builder application(App application);
+        @BindsInstance Builder application(App application);
         AppComponent build();
     }
 

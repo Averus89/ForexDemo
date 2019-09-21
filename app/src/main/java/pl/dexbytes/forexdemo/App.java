@@ -1,6 +1,5 @@
 package pl.dexbytes.forexdemo;
 
-import android.app.Activity;
 import android.app.Application;
 
 import javax.inject.Inject;

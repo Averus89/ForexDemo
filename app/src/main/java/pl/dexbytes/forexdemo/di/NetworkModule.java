@@ -1,5 +1,7 @@
 package pl.dexbytes.forexdemo.di;
 
+import android.util.Log;
+
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -28,7 +30,6 @@ import timber.log.Timber;
 public class NetworkModule {
 
     @Provides
-    @Singleton
     Gson provideGson() {
         GsonBuilder builder = new GsonBuilder();
         builder.setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
@@ -37,13 +38,11 @@ public class NetworkModule {
     }
 
     @Provides
-    @Singleton
     HttpLoggingInterceptor.Logger provideLogger(){
         return s -> Timber.d(s);
     }
 
     @Provides
-    @Singleton
     List<Interceptor> provideInterceptors(HttpLoggingInterceptor.Logger logger){
         List<Interceptor> interceptors = new ArrayList<>();
         HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor(logger);
@@ -65,7 +64,6 @@ public class NetworkModule {
     }
 
     @Provides
-    @Singleton
     OkHttpClient provideOkHttpClient(List<Interceptor> interceptors){
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
         builder.connectTimeout(10, TimeUnit.SECONDS)
@@ -76,7 +74,6 @@ public class NetworkModule {
     }
 
     @Provides
-    @Singleton
     Retrofit provideRetrofit(Gson gson, OkHttpClient okHttpClient){
         return new Retrofit.Builder()
                 .baseUrl(StaticVariables.Urls.BASE_URL)
@@ -87,7 +84,6 @@ public class NetworkModule {
     }
 
     @Provides
-    @Singleton
     OneForgeInterface providesOneForgeInterface(Retrofit retrofit){
         return retrofit.create(OneForgeInterface.class);
     }
