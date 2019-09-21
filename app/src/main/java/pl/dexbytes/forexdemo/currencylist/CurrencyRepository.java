@@ -1,25 +1,29 @@
 package pl.dexbytes.forexdemo.currencylist;
 
+import androidx.lifecycle.LiveData;
+
 import java.util.List;
 
-import io.reactivex.Observable;
-import pl.dexbytes.forexdemo.net.OneForge.OneForgeInterface;
-import pl.dexbytes.forexdemo.net.OneForge.Quote;
-import pl.dexbytes.forexdemo.vars.StaticVariables;
+import io.reactivex.Completable;
+import pl.dexbytes.forexdemo.db.quote.QuoteDao;
+import pl.dexbytes.forexdemo.db.quote.QuoteEntity;
 
 public class CurrencyRepository {
+    private QuoteDao mQuoteDao;
 
-    private OneForgeInterface mOneForgeInterface;
-
-    public CurrencyRepository(OneForgeInterface oneForgeInterface) {
-        mOneForgeInterface = oneForgeInterface;
+    public CurrencyRepository(QuoteDao quoteDao) {
+        mQuoteDao = quoteDao;
     }
 
-    public Observable<List<Quote>> getQuotes(){
-        return mOneForgeInterface.getQuotes(StaticVariables.Example.EXAMPLE_PAIRS);
+    public LiveData<List<QuoteEntity>> getQuotes(){
+        return mQuoteDao.getAll();
+    }
+
+    public Completable insert(QuoteEntity... entities){
+        return mQuoteDao.insertAll(entities);
     }
 
     public interface RepositorySelectedListener{
-        void onQuoteSelected(Quote quote);
+        void onQuoteSelected(QuoteEntity quote);
     }
 }

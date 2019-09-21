@@ -9,6 +9,6 @@ import pl.dexbytes.forexdemo.currencylist.CurrencyListModule;
 public abstract class AppBinder {
 
     @CurrencyListActivityScope
-    @ContributesAndroidInjector(modules = {CurrencyListModule.class, NetworkModule.class})
+    @ContributesAndroidInjector(modules = {CurrencyListModule.class, DatabaseModule.class})
     public abstract CurrencyListActivity currencyListActivity();
 }

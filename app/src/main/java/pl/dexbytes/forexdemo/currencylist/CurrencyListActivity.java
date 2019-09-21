@@ -13,6 +13,7 @@ import butterknife.BindView;
 import dagger.android.AndroidInjection;
 import pl.dexbytes.forexdemo.base.BaseActivity;
 import pl.dexbytes.forexdemo.R;
+import pl.dexbytes.forexdemo.db.quote.QuoteEntity;
 import pl.dexbytes.forexdemo.di.CurrencyListActivityScope;
 import pl.dexbytes.forexdemo.net.ApiResponse;
 import pl.dexbytes.forexdemo.net.OneForge.Quote;
@@ -46,7 +47,7 @@ public class CurrencyListActivity extends BaseActivity implements CurrencyReposi
     }
 
     @Override
-    public void onQuoteSelected(Quote quote) {
-        Timber.d("Quote selected: %s", quote.getSymbol());
+    public void onQuoteSelected(QuoteEntity quote) {
+        Timber.d("Quote selected: %s", quote.mSymbol);
     }
 }

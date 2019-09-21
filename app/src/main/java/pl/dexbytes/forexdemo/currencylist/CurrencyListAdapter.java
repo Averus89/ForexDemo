@@ -15,45 +15,20 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import pl.dexbytes.forexdemo.R;
-import pl.dexbytes.forexdemo.net.ApiResponse;
-import pl.dexbytes.forexdemo.net.OneForge.Quote;
-import timber.log.Timber;
+import pl.dexbytes.forexdemo.db.quote.QuoteEntity;
 
 public class CurrencyListAdapter extends RecyclerView.Adapter<CurrencyListAdapter.ViewHolder> {
     private CurrencyRepository.RepositorySelectedListener mRepositorySelectedListener;
-    private final List<Quote> mQuotes = new ArrayList<>();
+    private final List<QuoteEntity> mQuotes = new ArrayList<>();
 
     CurrencyListAdapter(CurrencyListViewModel viewModel, LifecycleOwner lifecycleOwner, CurrencyRepository.RepositorySelectedListener listener){
         mRepositorySelectedListener = listener;
-        viewModel.refresh().observe(lifecycleOwner, apiResponse -> {
+        viewModel.getAllQuotes().observe(lifecycleOwner, quoteEntities -> {
             mQuotes.clear();
-            consumeResponse(apiResponse);
+            mQuotes.addAll(quoteEntities);
             notifyDataSetChanged();
         });
         setHasStableIds(true);
-    }
-
-    private void consumeResponse(ApiResponse apiResponse) {
-        switch (apiResponse.getStatus()){
-            case LOADING:
-                Timber.d("loading");
-                break;
-            case SUCCESS:
-                Timber.d("success");
-                renderSuccessResponse(apiResponse);
-                break;
-            case ERROR:
-                Timber.e(apiResponse.getError());
-                break;
-        }
-    }
-
-    private void renderSuccessResponse(ApiResponse apiResponse) {
-        if (apiResponse.getResult() instanceof List) {
-            ((List) apiResponse.getResult()).stream()
-                    .filter(o -> o instanceof Quote)
-                    .forEach(q -> mQuotes.add((Quote) q));
-        }
     }
 
     @NonNull
@@ -78,7 +53,7 @@ public class CurrencyListAdapter extends RecyclerView.Adapter<CurrencyListAdapte
         @BindView(R.id.bid) TextView mBid;
         @BindView(R.id.ask) TextView mAsk;
         @BindView(R.id.price) TextView mPrice;
-        Quote mQuote;
+        QuoteEntity mQuote;
 
         public ViewHolder(@NonNull View itemView, CurrencyRepository.RepositorySelectedListener repositorySelectedListener) {
             super(itemView);
@@ -90,7 +65,7 @@ public class CurrencyListAdapter extends RecyclerView.Adapter<CurrencyListAdapte
             });
         }
 
-        void bind(Quote quote){
+        void bind(QuoteEntity quote){
             mQuote = quote;
             mCurrencyPair.setText(quote.getSymbol());
             mAsk.setText(String.valueOf(quote.getAsk()));
