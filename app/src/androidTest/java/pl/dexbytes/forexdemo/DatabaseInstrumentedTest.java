@@ -55,12 +55,7 @@ public class DatabaseInstrumentedTest {
 
     @Test
     public void insertQuoteAndReadInList() throws InterruptedException {
-        QuoteEntity quoteEntity = new QuoteEntity();
-        quoteEntity.setSymbol("PLN");
-        quoteEntity.setAsk(0.0d);
-        quoteEntity.setBid(0.0d);
-        quoteEntity.setPrice(0.0d);
-        quoteEntity.setTimestamp(new Date().getTime());
+        QuoteEntity quoteEntity = QuoteEntityMock.getRandomQuoteEntity();
         mQuoteDao.save(quoteEntity);
         TestObserver.test(mQuoteDao.findAll())
                 .awaitValue()
@@ -75,6 +70,16 @@ public class DatabaseInstrumentedTest {
         int size = getQuoteTableSize();
         mQuoteDao.saveAll(entities);
         assertEquals(size + 10, getQuoteTableSize());
+    }
+
+    @Test
+    public void findAnything() throws InterruptedException {
+        int size = getQuoteTableSize();
+        mQuoteDao.saveAll(QuoteEntityMock.getRandomQuoteEntityList(10));
+        TestObserver.test(mQuoteDao.findByName("%"))
+                .awaitValue()
+                .assertHasValue()
+                .assertValue(list -> list.size() - size == 10);
     }
 
     private int getQuoteTableSize() throws InterruptedException {

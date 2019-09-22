@@ -1,6 +1,11 @@
 package pl.dexbytes.forexdemo.currencylist;
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.widget.SearchView;
 
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -14,6 +19,7 @@ import dagger.android.AndroidInjection;
 import pl.dexbytes.forexdemo.base.BaseActivity;
 import pl.dexbytes.forexdemo.R;
 import pl.dexbytes.forexdemo.db.quote.QuoteEntity;
+import pl.dexbytes.forexdemo.util.StringUtils;
 import pl.dexbytes.forexdemo.util.ViewModelFactory;
 import timber.log.Timber;
 
@@ -44,6 +50,28 @@ public class CurrencyListActivity extends BaseActivity implements CurrencyReposi
         listView.setLayoutManager(new LinearLayoutManager(this));
 
         mCurrencyListViewModel.getQuotes().observe(this, adapter::updateData);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.activity_currency_list, menu);
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView = (SearchView) menu.findItem(R.id.app_bar_search).getActionView();
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String text) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String text) {
+                mCurrencyListViewModel.setFilterText(text);
+                return true;
+            }
+        });
+        return true;
     }
 
     @Override

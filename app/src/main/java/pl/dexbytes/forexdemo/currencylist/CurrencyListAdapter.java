@@ -28,7 +28,7 @@ public class CurrencyListAdapter extends RecyclerView.Adapter<CurrencyListAdapte
     }
 
     public void updateData(List<QuoteEntity> newQuotes) {
-        if(mQuotes != null) {
+        if(mQuotes.size() > 0) {
             QuoteDiffCallback quoteDiffCallback = new QuoteDiffCallback(newQuotes, mQuotes);
             DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(quoteDiffCallback);
 
@@ -37,6 +37,7 @@ public class CurrencyListAdapter extends RecyclerView.Adapter<CurrencyListAdapte
             diffResult.dispatchUpdatesTo(this);
         } else {
             mQuotes = newQuotes;
+            notifyDataSetChanged();
         }
     }
 

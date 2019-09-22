@@ -2,4 +2,5 @@
     <string name="app_name">ForexDemo</string>
     <string name="notification_channel">service_channel</string>
     <string name="notification_channel_id">pl.dexbytes.forexdemo</string>
+    <string name="search">Search</string>
 </resources>

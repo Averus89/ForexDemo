@@ -21,6 +21,10 @@ public class CurrencyRepository {
         return mQuoteDao.findAll();
     }
 
+    public LiveData<List<QuoteEntity>> getQuotesByName(String name) {
+        return mQuoteDao.findByName(name);
+    }
+
     public void saveAll(List<QuoteEntity> entities){
         mQuoteDao.saveAll(entities);
     }
