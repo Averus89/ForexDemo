@@ -16,6 +16,6 @@ public class StaticVariables {
     }
 
     public static class Example {
-        public static final String EXAMPLE_PAIRS = "EURUSD,GBPJPY,AUDUS";
+        public static final String EXAMPLE_PAIRS = "PLNEUR,PLNUSD,PLNNOK,PLNSEK,PLNGBP,ETHUSD,XRPUSD,BTCUSD";
     }
 }

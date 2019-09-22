@@ -5,13 +5,17 @@ import com.google.gson.JsonElement;
 import java.util.List;
 
 import io.reactivex.Observable;
+import io.reactivex.Single;
 import pl.dexbytes.forexdemo.vars.StaticVariables;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
 
 public interface OneForgeInterface {
     @GET(StaticVariables.Urls.QUOTES)
-    Observable<List<Quote>> getQuotes(@Query("pairs") String pairs);
+    Observable<List<QuoteDto>> getQuotes(@Query("pairs") String pairs);
+
+    @GET(StaticVariables.Urls.QUOTES)
+    Single<List<QuoteDto>> getQuotesSingle(@Query("pairs") String pairs);
 
     @GET(StaticVariables.Urls.SYMBOLS)
     Observable<List<String>> getPairs();

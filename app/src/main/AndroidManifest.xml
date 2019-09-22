@@ -3,9 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="pl.dexbytes.forexdemo">
 
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-
     <application
         android:name=".App"
         android:allowBackup="true"
@@ -22,6 +19,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <service
+            android:name=".service.RefreshQuote"
+            android:enabled="true"
+            android:exported="true" />
     </application>
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
 </manifest>
