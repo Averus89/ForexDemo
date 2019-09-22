@@ -1,4 +1,4 @@
-package pl.dexbytes.forexdemo.di;
+package pl.dexbytes.forexdemo.di.module;
 
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;

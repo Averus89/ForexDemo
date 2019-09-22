@@ -2,7 +2,7 @@ package pl.dexbytes.forexdemo.net.OneForge;
 
 import com.google.gson.annotations.SerializedName;
 
-public class Quote {
+public class QuoteDto {
     @SerializedName("symbol")
     String mSymbol;
 
@@ -16,7 +16,7 @@ public class Quote {
     Double mAsk;
 
     @SerializedName("timestamp")
-    Long timestamp;
+    Long mTimestamp;
 
     public String getSymbol() {
         return mSymbol;
@@ -51,10 +51,10 @@ public class Quote {
     }
 
     public Long getTimestamp() {
-        return timestamp;
+        return mTimestamp;
     }
 
     public void setTimestamp(Long timestamp) {
-        this.timestamp = timestamp;
+        this.mTimestamp = timestamp;
     }
 }

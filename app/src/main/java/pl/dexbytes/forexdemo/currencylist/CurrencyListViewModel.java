@@ -5,21 +5,23 @@ import androidx.lifecycle.ViewModel;
 
 import java.util.List;
 
-import io.reactivex.Completable;
+import javax.inject.Inject;
+
 import pl.dexbytes.forexdemo.db.quote.QuoteEntity;
 
 public class CurrencyListViewModel extends ViewModel {
     private final CurrencyRepository mCurrencyRepository;
 
+    @Inject
     public CurrencyListViewModel(CurrencyRepository currencyRepository) {
         mCurrencyRepository = currencyRepository;
     }
 
-    LiveData<List<QuoteEntity>> getAllQuotes(){
+    LiveData<List<QuoteEntity>> getQuotes(){
         return mCurrencyRepository.getQuotes();
     }
 
-    public Completable insert(QuoteEntity entity){
-        return mCurrencyRepository.insert(entity);
+    public void insert(QuoteEntity entity){
+        mCurrencyRepository.save(entity);
     }
 }

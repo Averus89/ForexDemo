@@ -6,26 +6,30 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import androidx.room.Update;
 
 import java.util.List;
-
-import io.reactivex.Completable;
-import io.reactivex.Single;
 
 @Dao
 public interface QuoteDao {
     @Query("SELECT * FROM quote")
-    LiveData<List<QuoteEntity>> getAll();
+    LiveData<List<QuoteEntity>> findAll();
 
-    @Query("SELECT * FROM quote WHERE quote.uid LIKE (:search)")
-    LiveData<List<QuoteEntity>> searchAllByNane(String search);
+    @Query("SELECT * FROM quote WHERE uid LIKE (:search)")
+    LiveData<List<QuoteEntity>> findByName(String search);
 
-    @Query("SELECT * FROM quote WHERE quote.uid IN (:pairs)")
-    LiveData<List<QuoteEntity>> getAllBySymbol(String[] pairs);
+    @Query("SELECT * FROM quote WHERE uid IN (:pairs)")
+    LiveData<List<QuoteEntity>> findByPairs(String[] pairs);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    Completable insertAll(QuoteEntity... entities);
+    void save(QuoteEntity entity);
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void saveAll(List<QuoteEntity> entities);
+
+    @Update
+    void update(QuoteEntity entity);
 
     @Delete
-    Single<Integer> delete(QuoteEntity entity);
+    int delete(QuoteEntity entity);
 }

@@ -12,10 +12,10 @@ import retrofit2.http.Query;
 
 public interface OneForgeInterface {
     @GET(StaticVariables.Urls.QUOTES)
-    Observable<List<Quote>> getQuotes(@Query("pairs") String pairs);
+    Observable<List<QuoteDto>> getQuotes(@Query("pairs") String pairs);
 
     @GET(StaticVariables.Urls.QUOTES)
-    Single<List<Quote>> getQuotesSingle(@Query("pairs") String pairs);
+    Single<List<QuoteDto>> getQuotesSingle(@Query("pairs") String pairs);
 
     @GET(StaticVariables.Urls.SYMBOLS)
     Observable<List<String>> getPairs();

@@ -1,4 +1,4 @@
-package pl.dexbytes.forexdemo.di;
+package pl.dexbytes.forexdemo.di.module;
 
 import android.content.Context;
 
@@ -11,10 +11,11 @@ import dagger.Provides;
 import pl.dexbytes.forexdemo.db.AppDatabase;
 import pl.dexbytes.forexdemo.db.quote.QuoteDao;
 
-@Module
+@Module(includes = {ViewModelModule.class})
 public class DatabaseModule {
 
     @Provides
+    @Singleton
     AppDatabase provideAppDatabase(Context context){
         return Room.databaseBuilder(context, AppDatabase.class, "app-database")
                 .fallbackToDestructiveMigration()
@@ -22,6 +23,7 @@ public class DatabaseModule {
     }
 
     @Provides
+    @Singleton
     QuoteDao provideQuoteDao(AppDatabase appDatabase){
         return appDatabase.quoteDao();
     }

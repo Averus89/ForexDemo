@@ -9,7 +9,7 @@ class Conversion {
     @SerializedName("text")
     String mText;
 
-    @SerializedName("timestamp")
+    @SerializedName("mTimestamp")
     Long mTimestamp;
 
     public Double getValue() {

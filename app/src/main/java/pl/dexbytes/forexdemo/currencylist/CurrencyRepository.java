@@ -4,23 +4,29 @@ import androidx.lifecycle.LiveData;
 
 import java.util.List;
 
-import io.reactivex.Completable;
+import javax.inject.Inject;
+
 import pl.dexbytes.forexdemo.db.quote.QuoteDao;
 import pl.dexbytes.forexdemo.db.quote.QuoteEntity;
 
 public class CurrencyRepository {
     private QuoteDao mQuoteDao;
 
+    @Inject
     public CurrencyRepository(QuoteDao quoteDao) {
         mQuoteDao = quoteDao;
     }
 
     public LiveData<List<QuoteEntity>> getQuotes(){
-        return mQuoteDao.getAll();
+        return mQuoteDao.findAll();
     }
 
-    public Completable insert(QuoteEntity... entities){
-        return mQuoteDao.insertAll(entities);
+    public void saveAll(List<QuoteEntity> entities){
+        mQuoteDao.saveAll(entities);
+    }
+
+    public void save(QuoteEntity entity) {
+        mQuoteDao.save(entity);
     }
 
     public interface RepositorySelectedListener{
