@@ -1,4 +1,4 @@
-package pl.dexbytes.forexdemo.currencylist;
+package pl.dexbytes.forexdemo.currencylist.currencylist;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;

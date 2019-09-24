@@ -13,6 +13,9 @@ import java.util.List;
 @Dao
 public interface QuoteDao {
     @Query("SELECT * FROM quote")
+    List<QuoteEntity> findAllSync();
+
+    @Query("SELECT * FROM quote")
     LiveData<List<QuoteEntity>> findAll();
 
     @Query("SELECT * FROM quote WHERE uid LIKE (:search)")

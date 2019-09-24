@@ -1,13 +1,20 @@
 package pl.dexbytes.forexdemo.db.quote.mock;
 
+import com.anychart.scales.DateTime;
+
+import org.threeten.bp.Instant;
+import org.threeten.bp.ZoneOffset;
+
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
 import pl.dexbytes.forexdemo.db.quote.QuoteEntity;
+import pl.dexbytes.forexdemo.util.StringUtils;
 
 public class QuoteEntityMock {
-    private static final String ALLOWED_CHARACTERS ="ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    public static final String ALLOWED_CHARACTERS ="ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
     public static List<QuoteEntity> getRandomQuoteEntityList(final int size){
         List<QuoteEntity> entities = new ArrayList<>();
@@ -20,19 +27,12 @@ public class QuoteEntityMock {
     public static QuoteEntity getRandomQuoteEntity(){
         Random random = new Random();
         QuoteEntity quoteEntity = new QuoteEntity();
-        quoteEntity.setSymbol(getRandomString(6));
+        quoteEntity.setSymbol(StringUtils.getRandomString(6, ALLOWED_CHARACTERS));
         quoteEntity.setAsk(random.nextDouble());
         quoteEntity.setBid(random.nextDouble());
         quoteEntity.setPrice(random.nextDouble());
-        quoteEntity.setTimestamp(random.nextLong());
+        quoteEntity.setDateTime(Instant.ofEpochMilli(new Date().getTime()).atOffset(ZoneOffset.ofHours(random.nextInt(12))));
         return quoteEntity;
     }
 
-    private static String getRandomString(final int sizeOfRandomString) {
-        final Random random = new Random();
-        final StringBuilder sb = new StringBuilder(sizeOfRandomString);
-        for(int i = 0 ; i < sizeOfRandomString ; ++i)
-            sb.append(ALLOWED_CHARACTERS.charAt(random.nextInt(ALLOWED_CHARACTERS.length())));
-        return sb.toString();
-    }
 }

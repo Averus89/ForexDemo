@@ -1,4 +1,4 @@
-package pl.dexbytes.forexdemo.currencylist;
+package pl.dexbytes.forexdemo.currencylist.currencylist;
 
 import android.view.LayoutInflater;
 import android.view.View;

@@ -1,6 +1,5 @@
-package pl.dexbytes.forexdemo.db.quote;
+package pl.dexbytes.forexdemo.db.quotehistory;
 
-import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
@@ -10,11 +9,13 @@ import org.threeten.bp.OffsetDateTime;
 
 import pl.dexbytes.forexdemo.db.util.TimeStampConverter;
 
-@Entity(tableName = "quote")
-public class QuoteEntity {
-    @PrimaryKey
-    @ColumnInfo(name = "uid")
-    @NonNull
+@Entity(tableName = "quote_history")
+public class QuoteHistoryEntity {
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "id")
+    int mId;
+
+    @ColumnInfo(name = "symbol")
     public String mSymbol;
 
     @ColumnInfo(name ="bid")
@@ -30,12 +31,19 @@ public class QuoteEntity {
     @TypeConverters({TimeStampConverter.class})
     public OffsetDateTime mDateTime;
 
-    @NonNull
+    public int getId() {
+        return mId;
+    }
+
+    public void setId(int id) {
+        mId = id;
+    }
+
     public String getSymbol() {
         return mSymbol;
     }
 
-    public void setSymbol(@NonNull String symbol) {
+    public void setSymbol(String symbol) {
         mSymbol = symbol;
     }
 

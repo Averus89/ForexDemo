@@ -9,11 +9,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
 
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 
+import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
@@ -21,11 +26,14 @@ import javax.inject.Inject;
 import dagger.android.AndroidInjection;
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 import pl.dexbytes.forexdemo.R;
-import pl.dexbytes.forexdemo.currencylist.CurrencyListActivity;
+import pl.dexbytes.forexdemo.currencylist.main.MainActivity;
 import pl.dexbytes.forexdemo.db.quote.QuoteDao;
+import pl.dexbytes.forexdemo.db.quotehistory.QuoteHistoryDao;
 import pl.dexbytes.forexdemo.mappers.QuoteMapper;
 import pl.dexbytes.forexdemo.net.OneForge.OneForgeInterface;
+import pl.dexbytes.forexdemo.net.OneForge.QuoteDto;
 import pl.dexbytes.forexdemo.rx.SchedulersFacade;
 import pl.dexbytes.forexdemo.vars.StaticVariables;
 import timber.log.Timber;
@@ -43,6 +51,9 @@ public class RefreshQuote extends Service {
     @Inject
     QuoteDao mQuoteDao;
 
+    @Inject
+    QuoteHistoryDao mQuoteHistoryDao;
+
     public RefreshQuote() {
     }
 
@@ -51,6 +62,7 @@ public class RefreshQuote extends Service {
         AndroidInjection.inject(this);
         super.onCreate();
         startForeground(NOTIFICATION_ID, createNotification());
+        firstDataDownload();
         scheduleWork();
     }
 
@@ -73,14 +85,37 @@ public class RefreshQuote extends Service {
                 .subscribe(aLong -> mOneForgeInterface.getQuotes(StaticVariables.Example.EXAMPLE_PAIRS)
                         .subscribeOn(mSchedulersFacade.io())
                         .observeOn(mSchedulersFacade.io())
-                        .subscribe(
-                                list -> mQuoteDao.saveAll(QuoteMapper.INSTANCE.quoteDtoToQuoteEntities(list)),
-                                Timber::e
-                        ));
+                        .subscribe(getListConsumer(), Timber::e)
+                );
+    }
+
+    private void firstDataDownload() {
+        new Thread(() -> {
+            if(mQuoteDao.findAllSync().size() == 0){
+                mOneForgeInterface.getQuotes(StaticVariables.Example.EXAMPLE_PAIRS)
+                        .subscribeOn(mSchedulersFacade.io())
+                        .observeOn(mSchedulersFacade.io())
+                        .subscribe(getListConsumer(), Timber::e)
+                        .dispose();
+            }
+        }).start();
+        /*mQuoteHistoryDao.selectStatsForPair("ETHUSD").observeForever(
+                quoteHistoryStats -> quoteHistoryStats.stream().forEach(
+                        q -> Timber.d("%d day; min: %f; avg %f; max: %f", q.getDay(), q.getMin(), q.getAvg(), q.getMax())
+                )
+        );*/
+    }
+
+    @NotNull
+    private Consumer<List<QuoteDto>> getListConsumer() {
+        return list -> {
+            mQuoteDao.saveAll(QuoteMapper.INSTANCE.quoteDtoToQuoteEntities(list));
+            mQuoteHistoryDao.insertAll(QuoteMapper.INSTANCE.quoteDtoToQuoteHistoryEntities(list));
+        };
     }
 
     private PendingIntent getActivityPendingIntent(){
-        Intent intent = new Intent(this, CurrencyListActivity.class);
+        Intent intent = new Intent(this, MainActivity.class);
         return PendingIntent.getActivity(
                 this,
                 0,

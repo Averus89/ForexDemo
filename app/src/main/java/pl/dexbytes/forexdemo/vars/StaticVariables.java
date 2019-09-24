@@ -18,4 +18,8 @@ public class StaticVariables {
     public static class Example {
         public static final String EXAMPLE_PAIRS = "PLNEUR,PLNUSD,PLNNOK,PLNSEK,PLNGBP,ETHUSD,XRPUSD,BTCUSD";
     }
+
+    public static class TimeFormat {
+        public static final String TIMESTAMP = "yyyy-MM-dd HH:mm:ss";
+    }
 }
