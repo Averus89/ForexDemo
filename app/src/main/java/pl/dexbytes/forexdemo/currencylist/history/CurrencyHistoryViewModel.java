@@ -18,14 +18,15 @@ import timber.log.Timber;
 public class CurrencyHistoryViewModel extends ViewModel {
     private static final String ARG_PAIR = "arg_pair";
     private final CurrencyHistoryRepository mHistoryRepository;
-    private final MutableLiveData<String> mSelectedPair = new MutableLiveData<>();
+    private MutableLiveData<String> mSelectedPair = new MutableLiveData<>();
 
     @Inject
     CurrencyHistoryViewModel(CurrencyHistoryRepository historyRepository) {
         mHistoryRepository = historyRepository;
     }
 
-    LiveData<List<QuoteHistoryStat>> getStatsForPair(){
+    LiveData<List<QuoteHistoryStat>> getStatsForPair(MutableLiveData<String> selectedPair) {
+        mSelectedPair = selectedPair;
         return Transformations
                 .switchMap(mSelectedPair, mHistoryRepository::getStatsForPair);
     }

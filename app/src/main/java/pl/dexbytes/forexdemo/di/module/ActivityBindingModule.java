@@ -9,5 +9,5 @@ import pl.dexbytes.forexdemo.currencylist.main.MainFragmentBindingModule;
 public abstract class ActivityBindingModule {
 
     @ContributesAndroidInjector(modules = {MainFragmentBindingModule.class})
-    abstract MainActivity bindCurrencyListActivity();
+    abstract MainActivity bindsMainActivity();
 }

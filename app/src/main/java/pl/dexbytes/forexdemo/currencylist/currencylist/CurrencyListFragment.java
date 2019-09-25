@@ -25,6 +25,7 @@ import butterknife.BindView;
 import pl.dexbytes.forexdemo.R;
 import pl.dexbytes.forexdemo.base.BaseFragment;
 import pl.dexbytes.forexdemo.currencylist.history.CurrencyHistoryFragment;
+import pl.dexbytes.forexdemo.currencylist.main.SharedViewModel;
 import pl.dexbytes.forexdemo.db.quote.QuoteEntity;
 import pl.dexbytes.forexdemo.util.ViewModelFactory;
 
@@ -40,6 +41,7 @@ public class CurrencyListFragment extends BaseFragment implements CurrencyReposi
     @Inject
     ViewModelFactory mViewModelFactory;
     private CurrencyListViewModel mCurrencyListViewModel;
+    private SharedViewModel mSharedViewModel;
 
     public CurrencyListFragment() {
         // Required empty public constructor
@@ -62,6 +64,9 @@ public class CurrencyListFragment extends BaseFragment implements CurrencyReposi
         mCurrencyListViewModel = ViewModelProviders
                 .of(this, mViewModelFactory)
                 .get(CurrencyListViewModel.class);
+        mSharedViewModel = ViewModelProviders
+                .of(getBaseActivity(), mViewModelFactory)
+                .get(SharedViewModel.class);
 
         addHeader();
 
@@ -71,14 +76,15 @@ public class CurrencyListFragment extends BaseFragment implements CurrencyReposi
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getBaseActivity(), DividerItemDecoration.VERTICAL));
 
         mCurrencyListViewModel.getQuotes().observe(this, adapter::updateData);
-        getBaseActivity().setTitle("Currency Pair List");
+        mSharedViewModel.setSelectedPair("Currency pairs");
     }
 
     @Override
     public void onQuoteSelected(QuoteEntity quote) {
+        mSharedViewModel.setSelectedPair(quote.getSymbol());
         getBaseActivity().getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.fragmentContainer,CurrencyHistoryFragment.newInstance(quote.getSymbol()))
+                .replace(R.id.fragmentContainer, new CurrencyHistoryFragment())
                 .addToBackStack(null)
                 .commit();
     }
