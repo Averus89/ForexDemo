@@ -34,10 +34,7 @@ public class CurrencyListViewModel extends ViewModel {
 
     LiveData<List<QuoteEntity>> getQuotes(){
         return Transformations
-                .switchMap(mFilterTextAll, input -> {
-
-                    return mCurrencyRepository.getQuotesByName(input);
-                });
+                .switchMap(mFilterTextAll, mCurrencyRepository::getQuotesByName);
     }
 
     public void insert(QuoteEntity entity){

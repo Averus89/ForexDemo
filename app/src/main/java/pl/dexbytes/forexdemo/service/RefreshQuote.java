@@ -99,11 +99,6 @@ public class RefreshQuote extends Service {
                         .dispose();
             }
         }).start();
-        /*mQuoteHistoryDao.selectStatsForPair("ETHUSD").observeForever(
-                quoteHistoryStats -> quoteHistoryStats.stream().forEach(
-                        q -> Timber.d("%d day; min: %f; avg %f; max: %f", q.getDay(), q.getMin(), q.getAvg(), q.getMax())
-                )
-        );*/
     }
 
     @NotNull

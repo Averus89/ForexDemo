@@ -4,9 +4,11 @@ package pl.dexbytes.forexdemo.currencylist.currencylist;
 import android.app.SearchManager;
 import android.content.Context;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.SearchView;
 
 import androidx.annotation.NonNull;
@@ -22,16 +24,18 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import pl.dexbytes.forexdemo.R;
 import pl.dexbytes.forexdemo.base.BaseFragment;
+import pl.dexbytes.forexdemo.currencylist.history.CurrencyHistoryFragment;
 import pl.dexbytes.forexdemo.db.quote.QuoteEntity;
 import pl.dexbytes.forexdemo.util.ViewModelFactory;
-import timber.log.Timber;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class CurrencyListFragment extends BaseFragment implements CurrencyRepository.RepositorySelectedListener {
     @BindView(R.id.recyclerView)
-    RecyclerView listView;
+    RecyclerView mRecyclerView;
+    @BindView(R.id.header)
+    LinearLayout mHeaderLayout;
 
     @Inject
     ViewModelFactory mViewModelFactory;
@@ -44,7 +48,7 @@ public class CurrencyListFragment extends BaseFragment implements CurrencyReposi
 
     @Override
     protected int getLayoutResourceId() {
-        return R.layout.fragment_currency_list;
+        return R.layout.fragment_simple_list;
     }
 
     @Override
@@ -59,17 +63,30 @@ public class CurrencyListFragment extends BaseFragment implements CurrencyReposi
                 .of(this, mViewModelFactory)
                 .get(CurrencyListViewModel.class);
 
+        addHeader();
+
         final CurrencyListAdapter adapter = new CurrencyListAdapter(this);
-        listView.addItemDecoration(new DividerItemDecoration(getBaseActivity(), DividerItemDecoration.VERTICAL));
-        listView.setAdapter(adapter);
-        listView.setLayoutManager(new LinearLayoutManager(getBaseActivity()));
+        mRecyclerView.setAdapter(adapter);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getBaseActivity()));
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(getBaseActivity(), DividerItemDecoration.VERTICAL));
 
         mCurrencyListViewModel.getQuotes().observe(this, adapter::updateData);
+        getBaseActivity().setTitle("Currency Pair List");
     }
 
     @Override
     public void onQuoteSelected(QuoteEntity quote) {
-        Timber.d("QuoteDto selected: %s", quote.mSymbol);
+        getBaseActivity().getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragmentContainer,CurrencyHistoryFragment.newInstance(quote.getSymbol()))
+                .addToBackStack(null)
+                .commit();
+    }
+
+    private void addHeader(){
+        mHeaderLayout.setVisibility(View.VISIBLE);
+        View view = LayoutInflater.from(getBaseActivity()).inflate(R.layout.view_currenty_list_item, mHeaderLayout, false);
+        mHeaderLayout.addView(view);
     }
 
     @Override
