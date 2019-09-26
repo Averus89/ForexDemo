@@ -17,6 +17,7 @@ import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.logging.HttpLoggingInterceptor;
+import pl.dexbytes.forexdemo.net.BaseUrlChangingInterceptor;
 import pl.dexbytes.forexdemo.net.OneForge.OneForgeInterface;
 import pl.dexbytes.forexdemo.vars.StaticVariables;
 import retrofit2.Retrofit;
@@ -49,6 +50,7 @@ public class NetworkModule {
         HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor(logger);
         loggingInterceptor.level(HttpLoggingInterceptor.Level.BODY);
         interceptors.add(loggingInterceptor);
+        interceptors.add(BaseUrlChangingInterceptor.get());
         Interceptor apiInterceptor = chain -> {
             Request request = chain.request();
             HttpUrl url = request.url()

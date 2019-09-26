@@ -82,6 +82,7 @@ public class CurrencyListFragment extends BaseFragment implements CurrencyReposi
     @Override
     public void onQuoteSelected(QuoteEntity quote) {
         mSharedViewModel.setSelectedPair(quote.getSymbol());
+        mCurrencyListViewModel.setFilterText("");
         getBaseActivity().getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.fragmentContainer, new CurrencyHistoryFragment())
